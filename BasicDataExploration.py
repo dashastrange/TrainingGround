@@ -43,9 +43,26 @@ val_predictions = melbourne_model.predict(val_X)
 print(val_predictions)
 print('--------------------------------------------------------------------------------------')
 #See absolute error. How precise our model is?
-print("MAE - Mean Absolute Error:")
+print("MAE - Mean Absolute Error. val_y is data not used for trainig - it is data for reference:")
+print(val_y)
 print("Spoiler Alert: the error is HUGE! Data which model sees for the first time discovered that our model prediction skill is shit... for now.")
 print(mean_absolute_error(val_y, val_predictions))
+
+#Improve a model by determining the best number of nodes so we find spot between overfitting and underfitting
+print("Function to compare MAE scores from different values for max_leaf_nodes:")
+def get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y):
+    model = DecisionTreeRegressor(max_leaf_nodes=max_leaf_nodes, random_state=1)
+    model.fit(train_X, train_y)
+    preds_val = model.predict(val_X)
+    mae = mean_absolute_error(val_y, preds_val)
+    return mae
+print('--------------------------------------------------------------------------------------')
+#Try to find the best number of nodes so error is smaller
+print("Get MAE for different values for nodes:")
+for max_leaf_nodes in [2, 5, 10, 20]:
+    my_mae = get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y)
+    print("Max leaf nodes: %d  \t\t Mean Absolute Error:  %d" %(max_leaf_nodes, my_mae))
+
 
 
 
