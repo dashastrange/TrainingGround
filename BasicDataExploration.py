@@ -5,7 +5,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import train_test_split
 
 #save a path to variable
-houses_file_path = '/Users/dariavasylieva/PycharmProjects/TrainingGround/melbourneHousing.csv'
+houses_file_path = '/Users/dariavasylieva/PycharmProjects/TrainingGround/Housing.csv'
 #read data and store them in DataFrame
 melbourne_data = pd.read_csv(houses_file_path)
 #print summary of the data
@@ -18,12 +18,12 @@ print(melbourne_data.columns)
 print('--------------------------------------------------------------------------------------')
 #select Prediction Target
 print("Select Prediction Target:")
-y = melbourne_data.Price
+y = melbourne_data.price
 print(y)
 print('--------------------------------------------------------------------------------------')
 #select Features
 print("Select Features:")
-melbourne_features = ["Rooms", "Bathroom", "Landsize", "Lattitude", "Longtitude"]
+melbourne_features = ["area", "bathrooms", "bedrooms", "parking"]
 X = melbourne_data[melbourne_features]
 print(X.describe())
 print('--------------------------------------------------------------------------------------')
@@ -59,9 +59,18 @@ def get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y):
 print('--------------------------------------------------------------------------------------')
 #Try to find the best number of nodes so error is smaller
 print("Get MAE for different values for nodes:")
-for max_leaf_nodes in [2, 5, 10, 20]:
+for max_leaf_nodes in [2, 5, 10, 20, 100]:
     my_mae = get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y)
     print("Max leaf nodes: %d  \t\t Mean Absolute Error:  %d" %(max_leaf_nodes, my_mae))
+#Using 5 nodes for the model decision tree since this value of nodes gives the smallest error value
+print("Now model will use 10 nodes:")
+better_model = DecisionTreeRegressor(max_leaf_nodes=10, random_state=1)
+better_model.fit(train_X, train_y)
+predict_values = better_model.predict(val_X)
+lower_mae = mean_absolute_error(val_y, predict_values)
+print("The lowest achieved MAE:")
+print(lower_mae)
+print('--------------------------------------------------------------------------------------')
 
 
 
