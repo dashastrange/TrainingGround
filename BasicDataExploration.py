@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from sklearn.metrics import mean_absolute_error
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import train_test_split
@@ -43,15 +42,15 @@ val_predictions = melbourne_model.predict(val_X)
 print(val_predictions)
 print('--------------------------------------------------------------------------------------')
 #See absolute error. How precise our model is?
-print("MAE - Mean Absolute Error. val_y is data not used for trainig - it is data for reference:")
+print("MAE - Mean Absolute Error. val_y is data not used for training - it is data for reference:")
 print(val_y)
 print("Spoiler Alert: the error is HUGE! Data which model sees for the first time discovered that our model prediction skill is shit... for now.")
 print(mean_absolute_error(val_y, val_predictions))
 
 #Improve a model by determining the best number of nodes so we find spot between overfitting and underfitting
 print("Function to compare MAE scores from different values for max_leaf_nodes:")
-def get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y):
-    model = DecisionTreeRegressor(max_leaf_nodes=max_leaf_nodes, random_state=1)
+def get_mae(the_max_leaf_nodes, train_X, val_X, train_y, val_y):
+    model = DecisionTreeRegressor(max_leaf_nodes=the_max_leaf_nodes, random_state=1)
     model.fit(train_X, train_y)
     preds_val = model.predict(val_X)
     mae = mean_absolute_error(val_y, preds_val)
@@ -71,6 +70,7 @@ lower_mae = mean_absolute_error(val_y, predict_values)
 print("The lowest achieved MAE:")
 print(lower_mae)
 print('--------------------------------------------------------------------------------------')
+
 
 
 
